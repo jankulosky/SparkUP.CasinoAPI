@@ -1,0 +1,22 @@
+# Build folders
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.vs/
+
+# IDE folders
+.vscode/
+
+# Local configuration files (containing secrets)
+appsettings.Development.json
+appsettings.Local.json
+*.local.json
+
+# EF Core Migrations if you want to ignore (optional)
+# Migrations/
+
+# Logs
+*.log
