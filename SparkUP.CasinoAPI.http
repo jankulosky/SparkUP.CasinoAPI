@@ -1,0 +1,6 @@
+@SparkUP.CasinoAPI_HostAddress = http://localhost:5193
+
+GET {{SparkUP.CasinoAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
