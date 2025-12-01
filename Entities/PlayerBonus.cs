@@ -1,11 +1,13 @@
 ﻿using SparkUP.CasinoAPI.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SparkUP.CasinoAPI.Entities
 {
     public class PlayerBonus
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
         [Required]
@@ -29,6 +31,6 @@ namespace SparkUP.CasinoAPI.Entities
         public string CreatedBy { get; set; }
 
         [MaxLength(100)]
-        public string UpdatedBy { get; set; }
+        public string? UpdatedBy { get; set; }
     }
 }

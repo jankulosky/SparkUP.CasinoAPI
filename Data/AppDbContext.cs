@@ -14,7 +14,9 @@ namespace SparkUP.CasinoAPI.Data
         {
             modelBuilder.Entity<PlayerBonus>(b =>
             {
-                b.Property(x => x.BonusType).HasConversion<int>();
+                b.Property(x => x.BonusType)
+                    .HasConversion<int>();
+
                 b.HasIndex(x => new { x.PlayerId, x.BonusType, x.IsActive });
             });
             base.OnModelCreating(modelBuilder);

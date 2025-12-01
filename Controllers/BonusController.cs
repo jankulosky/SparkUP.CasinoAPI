@@ -96,7 +96,7 @@ namespace SparkUP.CasinoAPI.Controllers
                     return NotFound(new { message = $"Bonus with ID {id} not found." });
                 }
 
-                return Ok(new { message = "Bonus successfully deactivated." });
+                return Ok(new { message = "Bonus successfully deleted." });
             }
             catch (KeyNotFoundException ex)
             {
