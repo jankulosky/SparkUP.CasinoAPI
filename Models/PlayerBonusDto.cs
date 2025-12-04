@@ -6,7 +6,7 @@
 
         public Guid PlayerId { get; set; }
 
-        public string BonusType { get; set; }
+        public string? BonusType { get; set; }
 
         public decimal Amount { get; set; }
 
@@ -18,6 +18,6 @@
 
         public DateTime? ExpiresAt { get; set; }
 
-        public string CreatedBy { get; set; }
+        public string? CreatedBy { get; set; }
     }
 }
