@@ -11,12 +11,12 @@ namespace SparkUP.CasinoAPI.Entities
 
         [Required]
         [MaxLength(50)]
-        public string Action { get; set; }
+        public string? Action { get; set; }
 
-        public string OperatorName { get; set; }
+        public string? OperatorName { get; set; }
 
         [MaxLength(500)]
-        public string Details { get; set; }
+        public string? Details { get; set; }
 
         public DateTime Timestamp { get; set; }
     }

@@ -18,7 +18,7 @@ namespace SparkUP.CasinoAPI.Repositories
         public async Task<PlayerBonus> GetByIdAsync(Guid id)
         {
             return await _context.PlayerBonuses
-                .FirstOrDefaultAsync(b => b.Id == id);
+                .FirstAsync(b => b.Id == id);
         }
 
         public async Task<(List<PlayerBonus> Items, int TotalCount)> GetAllAsync(int pageNumber, int pageSize)
@@ -35,10 +35,10 @@ namespace SparkUP.CasinoAPI.Repositories
             return (items, totalCount);
         }
 
-        public async Task<PlayerBonus>? GetActiveByPlayerAndTypeAsync(Guid playerId, BonusType bonusType)
+        public async Task<PlayerBonus> GetActiveByPlayerAndTypeAsync(Guid playerId, BonusType bonusType)
         {
             return await _context.PlayerBonuses
-                .FirstOrDefaultAsync(b =>
+                .FirstAsync(b =>
                     b.PlayerId == playerId &&
                     b.BonusType == bonusType &&
                     b.IsActive);

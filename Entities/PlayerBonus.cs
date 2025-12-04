@@ -28,7 +28,7 @@ namespace SparkUP.CasinoAPI.Entities
         
 
         [MaxLength(100)]
-        public string CreatedBy { get; set; }
+        public string? CreatedBy { get; set; }
 
         [MaxLength(100)]
         public string? UpdatedBy { get; set; }

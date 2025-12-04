@@ -48,7 +48,7 @@ namespace SparkUP.CasinoAPI.Services
 
             if (existingBonus != null)
             {
-                throw new InvalidOperationException(
+                throw new BusinessRuleException(
                     $"Player {createDto.PlayerId} already has an active {createDto.BonusType} bonus.");
             }
 
@@ -56,7 +56,7 @@ namespace SparkUP.CasinoAPI.Services
             bonus.CreatedBy = operatorName;
             bonus.CreatedAt = DateTime.UtcNow;
 
-            var createdBonus = await _bonusRepository.CreateAsync(bonus);
+            var createdBonus = await _bonusRepository.CreateAsync(bonus) ?? throw new BusinessRuleException("Failed to create bonus."); ;
 
             await _bonusRepository.LogAuditAsync(
                 createdBonus.Id,
@@ -69,7 +69,23 @@ namespace SparkUP.CasinoAPI.Services
 
         public async Task<PlayerBonusDto> UpdateBonusAsync(Guid id, UpdateBonusDto updateDto, string operatorName)
         {
-            var bonus = await _bonusRepository.GetByIdAsync(id) ?? throw new KeyNotFoundException($"Bonus with ID {id} not found.");
+            var bonus = await _bonusRepository.GetByIdAsync(id) ?? throw new BusinessRuleException($"Bonus with ID {id} not found.");
+
+            if (updateDto.IsActive == true)
+            {
+                var existingActive = await _bonusRepository.GetActiveByPlayerAndTypeAsync(
+                    bonus.PlayerId,
+                    bonus.BonusType
+                );
+
+                if (existingActive != null && existingActive.Id != id)
+                {
+                    throw new BusinessRuleException(
+                        $"Player {bonus.PlayerId} already has an active {bonus.BonusType} bonus."
+                    );
+                }
+            }
+
             var changes = new List<string>();
 
             if (updateDto.Amount.HasValue)
@@ -106,7 +122,10 @@ namespace SparkUP.CasinoAPI.Services
 
         public async Task<bool> DeleteBonusAsync(Guid id, string operatorName)
         {
-            var bonus = await _bonusRepository.GetByIdAsync(id) ?? throw new KeyNotFoundException($"Bonus with ID {id} not found.");
+            var bonus = await _bonusRepository.GetByIdAsync(id);
+
+            if (bonus == null) return false;
+
             var result = await _bonusRepository.DeleteAsync(id);
 
             if (result)

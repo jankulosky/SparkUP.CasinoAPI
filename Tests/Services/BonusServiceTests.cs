@@ -6,7 +6,7 @@ using SparkUP.CasinoAPI.Enums;
 using SparkUP.CasinoAPI.Mapping;
 using SparkUP.CasinoAPI.Repositories.Interfaces;
 using SparkUP.CasinoAPI.Services;
-using Xunit;
+using Microsoft.Extensions.Logging;
 
 namespace SparkUP.CasinoAPI.Tests.Services
 {
@@ -18,7 +18,7 @@ namespace SparkUP.CasinoAPI.Tests.Services
 
         public BonusServiceTests()
         {
-            var loggerFactory = new LoggerFactory();
+            var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
 
             var configExpr = new MapperConfigurationExpression();
             configExpr.AddProfile(new BonusMappingProfile());
@@ -96,11 +96,12 @@ namespace SparkUP.CasinoAPI.Tests.Services
                 Amount = 100
             };
 
-            PlayerBonus captured = null;
+            PlayerBonus? captured = null;
 
             _mockRepository
                 .Setup(r => r.CreateAsync(It.IsAny<PlayerBonus>()))
-                .Callback<PlayerBonus>(b => captured = b);
+                .Callback<PlayerBonus>(b => captured = b)
+                .ReturnsAsync((PlayerBonus b) => b);
 
             var result = await _service.CreateBonusAsync(req, "admin");
 
@@ -167,11 +168,14 @@ namespace SparkUP.CasinoAPI.Tests.Services
                 r.GetActiveByPlayerAndTypeAsync(existing.PlayerId, existing.BonusType))
                 .ReturnsAsync(existing);
 
+            _mockRepository.Setup(r => r.UpdateAsync(It.IsAny<PlayerBonus>()))
+                .ReturnsAsync((PlayerBonus b) => b);
+
             var req = new UpdateBonusDto
             {
                 Amount = 999,
                 IsActive = true
-            };
+            };            
 
             var result = await _service.UpdateBonusAsync(bonusId, req, "admin");
 
